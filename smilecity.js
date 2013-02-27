@@ -175,6 +175,7 @@ sc.today = curHour + ":" + curMinute + ":" + curSeconds + curMeridiem + " " + da
 
 $(document).ready(function(){
 	/**/
+	
 	// START OF EXECUTABLE CODE
 	// timer: in 3 hours from now, go home/refresh.
 	setTimeout(function(){
