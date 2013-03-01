@@ -54,6 +54,7 @@ sc.whereAreWe = function(){
 	console.log('-- whereAreWe: '+location+' --');
 	return location;
 }
+/**/
 sc.anythingLeftToDo = function(){
 	console.log('<< anythingLeftToDo()');
 	var somethingToDo = 0;
@@ -93,16 +94,18 @@ sc.anythingLeftToDo = function(){
 	console.log('>> anythingLeftToDo()');
 	return somethingToDo;
 }
-sc.isItTheWeekend(){
+/**/
+sc.isItTheWeekend = function(){
     var weekend = 0;
 	console.log('<< itsTheWeekend()');
     if((dayOfWeek == 'Sunday')||(dayOfWeek == 'Saturday')){
         weekend = 1;
-        console.log(weekend);
+        console.log(dayOfWeek);
     }
 	console.log('>> itsTheWeekend()');
     return weekend;
 }
+/**/
 
 // actions
 sc.goTo = function(url){ // in 5 seconds
@@ -115,6 +118,7 @@ sc.goHome = function(){
 	sc.goTo('http://www.smilecity.co.nz/default.aspx');
 	return true;
 }
+/**/
 sc.doTheFirstThing = function(){
 	console.log('<< doTheFirstThing()');
 	var success = 0;
@@ -142,8 +146,8 @@ sc.doTheFirstThing = function(){
 			break;
 		case 'wclink':// count to 15 and go home (or accounts, then home)
             // if it's the weekend, go to myopinions instead.
-            var destination = sc.goHome()
-            if(sc.theWeekend()){
+            var destination = sc.goHome();
+            if(sc.theWeekend){
                 destination = sc.goTo('http://www.myopinions.co.nz/rewards/instantwin.aspx');
             }
 			setTimeout(function(){
@@ -151,7 +155,7 @@ sc.doTheFirstThing = function(){
 			},10000);
 			break;
         case 'myop':
-            if(0/* there's a link we can click */){ // positive message
+            if(0){ // positive message
                 // click it
             }// then, or if there isn't a link, go home
             sc.goHome()
@@ -180,6 +184,7 @@ sc.doTheFirstThing = function(){
 	console.log('>> doTheFirstThing()');
 	return success;
 }
+/**/
 
 // properties
 sc.here = sc.whereAreWe();
@@ -199,7 +204,7 @@ var objToday = new Date(),
 	curMeridiem = objToday.getHours() > 12 ? "pm" : "am";
 sc.today = curHour + ":" + curMinute + ":" + curSeconds + curMeridiem + " " + dayOfWeek + " " + dayOfMonth + " " + curMonth;
 sc.theWeekend = sc.isItTheWeekend();
-
+/**/
 
 $(document).ready(function(){
 	/**/
