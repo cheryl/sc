@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name         Smilecity
-// @version      0.3
+// @version      0.4
 // @description	 daily navigate through smilecity.co.nz earning opportunities.
 // @match        http://www.smilecity.co.nz/*
+// @match        http://www.myopinions.co.nz/rewards/instantwin.aspx
 // @require      http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @copyright    2013, cheryl
 // ==/UserScript==
@@ -16,6 +17,7 @@ sc.regexes.home = /www\.smilecity\.co\.nz(\/)?(default.aspx)?$/i;
 sc.regexes.guessinggame = /earn\/guessinggame\.aspx\/?$/i;
 sc.regexes.webclicks = /earn\/webclicks\.aspx\/?$/i;
 sc.regexes.wclink = /earn\/topframe\.aspx\?adid=(\d)+$/i;
+sc.regexes.myop = /rewards\/instantwin\.aspx\/?$/i;
 // text resources
 sc.text = {};
 sc.text.home = "here's what you can do to earn points right now:";
@@ -23,14 +25,16 @@ sc.text.webclicks = 'You have already earned points for clicking today';
 sc.text.guessinggame = 'Autopick';
 sc.text.homewebclicks = 'Click on a Web Clicks ad for 2 points.';
 sc.text.homeguessinggame = 'Play the Guessing Game';
+sc.text.myop = 'You have already played Instant Win this week.';
 // dom objects for checking
 sc.check = {};
 sc.check.home = $('div:contains("'+sc.text.home+'")').length; // != or > 0, positive message exists
 sc.check.guessinggame = $('#formOutline input[type=submit]').attr('disabled'); // == undefined, button isn't disabled
-sc.check.webclicks = $('div:contains('+sc.text.webclicks+'.)').length; // == 0, negative message doesn't exist
+sc.check.webclicks = $('div:contains("'+sc.text.webclicks+'")').length; // == 0, negative message doesn't exist
 sc.check.homepoll = $('div#earnNowWrap form').length; // != or > 0, form exists
 sc.check.homewebclicks = $('a:contains("'+sc.text.homewebclicks+'")').length; // != or > 0, link to webclicks exists
 sc.check.homeguessinggame = $('a:contains("'+sc.text.homeguessinggame+'")').length; // != or > 0, link to guessing game exists
+sc.check.myop = $('div:contains("'+sc.text.myop+'")').length; // == 0, negative message doesn't exist
 /**/
 
 // questions
@@ -44,6 +48,8 @@ sc.whereAreWe = function(){
 		location = 'webclicks';
 	} else if (sc.regexes.wclink.test(window.location.href)){
 		location = 'wclink';
+    } else if (sc.regexes.myop.test(window.location.href)){
+        location = 'myop';
 	}
 	console.log('-- whereAreWe: '+location+' --');
 	return location;
@@ -87,6 +93,16 @@ sc.anythingLeftToDo = function(){
 	console.log('>> anythingLeftToDo()');
 	return somethingToDo;
 }
+sc.isItTheWeekend(){
+    var weekend = 0;
+	console.log('<< itsTheWeekend()');
+    if((dayOfWeek == 'Sunday')||(dayOfWeek == 'Saturday')){
+        weekend = 1;
+        console.log(weekend);
+    }
+	console.log('>> itsTheWeekend()');
+    return weekend;
+}
 
 // actions
 sc.goTo = function(url){ // in 5 seconds
@@ -125,10 +141,21 @@ sc.doTheFirstThing = function(){
 			sc.goTo(url);
 			break;
 		case 'wclink':// count to 15 and go home (or accounts, then home)
+            // if it's the weekend, go to myopinions instead.
+            var destination = sc.goHome()
+            if(sc.theWeekend()){
+                destination = sc.goTo('http://www.myopinions.co.nz/rewards/instantwin.aspx');
+            }
 			setTimeout(function(){
-				sc.goHome();
+				destination();
 			},10000);
 			break;
+        case 'myop':
+            if(0/* there's a link we can click */){ // positive message
+                // click it
+            }// then, or if there isn't a link, go home
+            sc.goHome()
+            break;
 		case 'guessinggame': // autopick, then submit
 			consoleMsg = 'Autopick, wait for lag, then submit.';
 			var url = $('a:contains("'+sc.text.guessinggame+'")').attr('href');
@@ -171,6 +198,7 @@ var objToday = new Date(),
 	curSeconds = objToday.getSeconds() < 10 ? "0" + objToday.getSeconds() : objToday.getSeconds(),
 	curMeridiem = objToday.getHours() > 12 ? "pm" : "am";
 sc.today = curHour + ":" + curMinute + ":" + curSeconds + curMeridiem + " " + dayOfWeek + " " + dayOfMonth + " " + curMonth;
+sc.theWeekend = sc.isItTheWeekend();
 
 
 $(document).ready(function(){
