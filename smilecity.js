@@ -80,7 +80,7 @@ sc.anythingLeftToDo = function(){
 			somethingToDo=1;
 			break;
 		default: // we are somewhere else, notify so we can add it to this switch
-			consoleMsg = 'our current location\'s earning message is unknown: '+smilecity.here;
+			consoleMsg = 'our current location\'s earning message is unknown: '+sc.here;
 			break;
 	}
 	console.log(consoleMsg);
