@@ -139,7 +139,7 @@ sc.doTheFirstThing = function(){
 			break;
 		default:
 			// we are somewhere else, notify so we can add it to this switch
-			consoleMsg = 'our current location is unknown: '+smilecity.here;
+			consoleMsg = 'our current location is unknown: '+sc.here;
 			break;
 	}
 	if(consoleMsg.length > 0){
