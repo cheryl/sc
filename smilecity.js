@@ -15,7 +15,7 @@ sc.regexes = {};
 sc.regexes.home = /www\.smilecity\.co\.nz(\/)?(default.aspx)?$/i;
 sc.regexes.guessinggame = /earn\/guessinggame\.aspx\/?$/i;
 sc.regexes.webclicks = /earn\/webclicks\.aspx\/?$/i;
-sc.regexes.wclink = /earn\/topframe\.aspx\/?$/i;
+sc.regexes.wclink = /earn\/topframe\.aspx\?adid=(\d)+$/i;
 // text resources
 sc.text = {};
 sc.text.home = "here's what you can do to earn points right now:";
