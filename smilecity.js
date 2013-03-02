@@ -39,157 +39,157 @@ sc.check.myop = $('div:contains("'+sc.text.myop+'")').length; // == 0, negative 
 
 // questions
 sc.whereAreWe = function(){
-	var location = 'nowhere';
-	if(sc.regexes.home.test(window.location.href)){
-		location = 'home';
-	} else if (sc.regexes.guessinggame.test(window.location.href)){
-		location = 'guessinggame';
-	} else if (sc.regexes.webclicks.test(window.location.href)){
-		location = 'webclicks';
-	} else if (sc.regexes.wclink.test(window.location.href)){
-		location = 'wclink';
+    var location = 'nowhere';
+    if(sc.regexes.home.test(window.location.href)){
+        location = 'home';
+    } else if (sc.regexes.guessinggame.test(window.location.href)){
+        location = 'guessinggame';
+    } else if (sc.regexes.webclicks.test(window.location.href)){
+        location = 'webclicks';
+    } else if (sc.regexes.wclink.test(window.location.href)){
+        location = 'wclink';
     } else if (sc.regexes.myop.test(window.location.href)){
         location = 'myop';
-	}
-	console.log('-- whereAreWe: '+location+' --');
-	return location;
+    }
+    console.log('-- whereAreWe: '+location+' --');
+    return location;
 }
 /**/
 sc.anythingLeftToDo = function(){
-	console.log('<< anythingLeftToDo()');
-	var somethingToDo = 0;
-	var consoleMsg = '';
-	switch(sc.here){
-		case 'home':
-			consoleMsg = 'home: no';
-			if(sc.check.home > 0){ // ie, the div containing this text exists
-				somethingToDo=1;
-				consoleMsg = 'home: yes';
-			}
-			break;
-		case 'guessinggame':
-			consoleMsg = 'guessing game: no';
-			if(sc.check.guessinggame == undefined){ // the submit is not disabled
-				somethingToDo=1;
-				consoleMsg = 'guessing game: yes';
-			}
-			break;
-		case 'webclicks':
-			// is there only one .warningWrap, or absence of .warningTxtOnly, or absence of 'You have already earned points for clicking today.' (yes)
-			consoleMsg = 'webclicks: no';
-			if(sc.check.webclicks == 0){ // ie, the div containing this text does not exist
-				somethingToDo=1;
-				consoleMsg = 'webclicks: yes';
-			}
-			break;
-		case 'wclink':
-			consoleMsg = 'wclink: we just have to go back home after it\'s loaded.';
-			somethingToDo=1;
-			break;
+    console.log('<< anythingLeftToDo()');
+    var somethingToDo = 0;
+    var consoleMsg = '';
+    switch(sc.here){
+        case 'home':
+            consoleMsg = 'home: no';
+            if(sc.check.home > 0){ // ie, the div containing this text exists
+                somethingToDo=1;
+                consoleMsg = 'home: yes';
+            }
+            break;
+        case 'guessinggame':
+            consoleMsg = 'guessing game: no';
+            if(sc.check.guessinggame == undefined){ // the submit is not disabled
+                somethingToDo=1;
+                consoleMsg = 'guessing game: yes';
+            }
+            break;
+        case 'webclicks':
+            // is there only one .warningWrap, or absence of .warningTxtOnly, or absence of 'You have already earned points for clicking today.' (yes)
+            consoleMsg = 'webclicks: no';
+            if(sc.check.webclicks == 0){ // ie, the div containing this text does not exist
+                somethingToDo=1;
+                consoleMsg = 'webclicks: yes';
+            }
+            break;
+        case 'wclink':
+            consoleMsg = 'wclink: we just have to go back home after it\'s loaded.';
+            somethingToDo=1;
+            break;
         case 'myop':
             consoleMsg = 'myop: no';
-			if(sc.check.myop == 0){ // the div containing this text does not exist
-				somethingToDo=1;
-				consoleMsg = 'myop: yes';
-			}
+            if(sc.check.myop == 0){ // the div containing this text does not exist
+                somethingToDo=1;
+                consoleMsg = 'myop: yes';
+            }
             break;
-		default: // we are somewhere else, notify so we can add it to this switch
-			consoleMsg = 'our current location\'s earning message is unknown: '+sc.here;
-			break;
-	}
-	console.log(consoleMsg);
-	console.log('>> anythingLeftToDo()');
-	return somethingToDo;
+        default: // we are somewhere else, notify so we can add it to this switch
+            consoleMsg = 'our current location\'s earning message is unknown: '+sc.here;
+            break;
+    }
+    console.log(consoleMsg);
+    console.log('>> anythingLeftToDo()');
+    return somethingToDo;
 }
 /**/
 sc.isItTheWeekend = function(){
     var weekend = 0;
-	console.log('<< isItTheWeekend()');
+    console.log('<< isItTheWeekend()');
     if((dayOfWeek == 'Sunday')||(dayOfWeek == 'Saturday')){
         weekend = 1;
         console.log(dayOfWeek);
     }
-	console.log('>> isItTheWeekend()');
+    console.log('>> isItTheWeekend()');
     return weekend;
 }
 /**/
 
 // actions
 sc.goTo = function(url){ // in 5 seconds
-	setTimeout(function(){
-		window.location = url;
-	},5000)
-	return true;
+    setTimeout(function(){
+        window.location = url;
+    },5000)
+    return true;
 }
 sc.goHome = function(){
-	sc.goTo('http://www.smilecity.co.nz/default.aspx');
-	return true;
+    sc.goTo('http://www.smilecity.co.nz/default.aspx');
+    return true;
 }
 /**/
 sc.doTheFirstThing = function(){
-	console.log('<< doTheFirstThing()');
-	var success = 0;
-	var consoleMsg = '';
-	console.log('* '+sc.here);
-	// if we're on the 'guessinggame' page, autopick and go home
-	// if we have a poll to fill out, choose the "I'd rather not say" option if it exists and press submit
-	switch(sc.here){
-		case 'home':
-			if(sc.check.homepoll > 0){ // poll
-				consoleMsg = 'Do the poll';
-			} else if(sc.check.homewebclicks > 0){ // webclicks
-				var url = $('a:contains("'+sc.text.homewebclicks+'")').attr('href');
-				sc.goTo(url);
-			} else if(sc.check.homeguessinggame > 0) { // guessinggame
-				var url = $('a:contains("'+sc.text.homeguessinggame+'")').attr('href');
-				sc.goTo(url);
-			} else {
-				consoleMsg = 'Something needs to be done but we haven\'t learnt how to do it yet';
-			}
-			break;
-		case 'webclicks':// click a link
-			var url = $('div.wcText:first a').attr('href');
-			sc.goTo(url);
-			break;
-		case 'wclink':// count to 15 and go home, OR if it's the weekend, go to myopinions instead.
+    console.log('<< doTheFirstThing()');
+    var success = 0;
+    var consoleMsg = '';
+    console.log('* '+sc.here);
+    // if we're on the 'guessinggame' page, autopick and go home
+    // if we have a poll to fill out, choose the "I'd rather not say" option if it exists and press submit
+    switch(sc.here){
+        case 'home':
+            if(sc.check.homepoll > 0){ // poll
+                consoleMsg = 'Do the poll';
+            } else if(sc.check.homewebclicks > 0){ // webclicks
+                var url = $('a:contains("'+sc.text.homewebclicks+'")').attr('href');
+                sc.goTo(url);
+            } else if(sc.check.homeguessinggame > 0) { // guessinggame
+                var url = $('a:contains("'+sc.text.homeguessinggame+'")').attr('href');
+                sc.goTo(url);
+            } else {
+                consoleMsg = 'Something needs to be done but we haven\'t learnt how to do it yet';
+            }
+            break;
+        case 'webclicks':// click a link
+            var url = $('div.wcText:first a').attr('href');
+            sc.goTo(url);
+            break;
+        case 'wclink':// count to 15 and go home, OR if it's the weekend, go to myopinions instead.
             var destination = sc.goHome();
             if(sc.theWeekend){
                 destination = sc.goTo('http://www.myopinions.co.nz/rewards/instantwin.aspx');
             }
-			setTimeout(function(){
-				destination();
-			},10000);
-			break;
+            setTimeout(function(){
+                destination();
+            },10000);
+            break;
         case 'myop':
             // click the first link
-            var url = $('div.box ul:first a:first');.attr('href');
+            var url = $('div.box ul:first a:first').attr('href');
             sc.goTo(url); // if javascript only, this may take a while...
             sc.goHome();
             // if it was a true GET, will reload the page and !anythingToDo() so will go home anyway.
             break;
-		case 'guessinggame': // autopick, then submit
-			consoleMsg = 'Autopick, wait for lag, then submit.';
-			var url = $('a:contains("'+sc.text.guessinggame+'")').attr('href');
-			sc.goTo(url); // for some reason this takes a while..
-			setTimeout(function(){
-					$('div.gGameDetailsWrap input[type=submit]').click();
-					}, 15000);
-			break;
-		default:
-			// we are somewhere else, notify so we can add it to this switch
-			consoleMsg = 'our current location is unknown: '+sc.here;
-			break;
-	}
-	if(consoleMsg.length > 0){
-		console.log(consoleMsg);
-	}
-	success = 1;
-	// and then if it doesn't refresh already, always refresh after doing it to ask the sequence again
-	//setTimeout(function(){
-	//window.location.reload()
-	//},10000);
-	console.log('>> doTheFirstThing()');
-	return success;
+        case 'guessinggame': // autopick, then submit
+            consoleMsg = 'Autopick, wait for lag, then submit.';
+            var url = $('a:contains("'+sc.text.guessinggame+'")').attr('href');
+            sc.goTo(url); // for some reason this takes a while..
+            setTimeout(function(){
+                $('div.gGameDetailsWrap input[type=submit]').click();
+            }, 15000);
+            break;
+        default:
+            // we are somewhere else, notify so we can add it to this switch
+            consoleMsg = 'our current location is unknown: '+sc.here;
+            break;
+    }
+    if(consoleMsg.length > 0){
+        console.log(consoleMsg);
+    }
+    success = 1;
+    // and then if it doesn't refresh already, always refresh after doing it to ask the sequence again
+    //setTimeout(function(){
+    //window.location.reload()
+    //},10000);
+    console.log('>> doTheFirstThing()');
+    return success;
 }
 /**/
 
@@ -198,43 +198,43 @@ sc.here = sc.whereAreWe();
 sc.somethingToDo = sc.anythingLeftToDo();
 // lifted from http://stackoverflow.com/questions/1531093/how-to-get-current-date-in-javascript
 var objToday = new Date(),
-	weekday = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'),
-	dayOfWeek = weekday[objToday.getDay()],
-	domEnder = new Array( 'th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th' ),
-	dayOfMonth = sc.today + (objToday.getDate() < 10) ? '0' + objToday.getDate() + domEnder[objToday.getDate()] : objToday.getDate() + domEnder[parseFloat(("" + objToday.getDate()).substr(("" + objToday.getDate()).length - 1))],
-	months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'),
-	curMonth = months[objToday.getMonth()],
-	curYear = objToday.getFullYear(),
-	curHour = objToday.getHours() > 12 ? objToday.getHours() - 12 : (objToday.getHours() < 10 ? "0" + objToday.getHours() : objToday.getHours()),
-	curMinute = objToday.getMinutes() < 10 ? "0" + objToday.getMinutes() : objToday.getMinutes(),
-	curSeconds = objToday.getSeconds() < 10 ? "0" + objToday.getSeconds() : objToday.getSeconds(),
-	curMeridiem = objToday.getHours() > 12 ? "pm" : "am";
+    weekday = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'),
+    dayOfWeek = weekday[objToday.getDay()],
+    domEnder = new Array( 'th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th' ),
+    dayOfMonth = sc.today + (objToday.getDate() < 10) ? '0' + objToday.getDate() + domEnder[objToday.getDate()] : objToday.getDate() + domEnder[parseFloat(("" + objToday.getDate()).substr(("" + objToday.getDate()).length - 1))],
+        months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'),
+            curMonth = months[objToday.getMonth()],
+                curYear = objToday.getFullYear(),
+                    curHour = objToday.getHours() > 12 ? objToday.getHours() - 12 : (objToday.getHours() < 10 ? "0" + objToday.getHours() : objToday.getHours()),
+                        curMinute = objToday.getMinutes() < 10 ? "0" + objToday.getMinutes() : objToday.getMinutes(),
+                            curSeconds = objToday.getSeconds() < 10 ? "0" + objToday.getSeconds() : objToday.getSeconds(),
+                                curMeridiem = objToday.getHours() > 12 ? "pm" : "am";
 sc.today = curHour + ":" + curMinute + ":" + curSeconds + curMeridiem + " " + dayOfWeek + " " + dayOfMonth + " " + curMonth;
 sc.theWeekend = sc.isItTheWeekend();
 /**/
 
 $(document).ready(function(){
-	/**/
-	
-	// START OF EXECUTABLE CODE
-	// timer: in 3 hours from now, go home/refresh.
-	setTimeout(function(){
-		location.reload()
-	},21600000);
-
-	console.log('<< MAIN CODE'); // ask this sequence at any page load:
-	if(sc.somethingToDo){
-		sc.doTheFirstThing();
-	} else {
-		console.log('nothing to do: are we home?'); // no: are we home?
-		if(sc.here == 'home'){
-			console.log('yes: ok, done for now, just wait for the timer to refresh'); // yes: ok, done for now, just wait for the timer to refresh
-		} else {
-			sc.goHome();
-			console.log('no: go home, ie ask sequence again'); // no: go home, ie ask sequence again
-		}
-	}
-	console.log(sc.today);
-	console.log('>> MAIN CODE');
-	/**/
+    /**/
+    
+    // START OF EXECUTABLE CODE
+    // timer: in 3 hours from now, go home/refresh.
+    setTimeout(function(){
+        location.reload()
+    },21600000);
+    
+    console.log('<< MAIN CODE'); // ask this sequence at any page load:
+    if(sc.somethingToDo){
+        sc.doTheFirstThing();
+    } else {
+        console.log('nothing to do: are we home?'); // no: are we home?
+        if(sc.here == 'home'){
+            console.log('yes: ok, done for now, just wait for the timer to refresh'); // yes: ok, done for now, just wait for the timer to refresh
+        } else {
+            sc.goHome();
+            console.log('no: go home, ie ask sequence again'); // no: go home, ie ask sequence again
+        }
+    }
+    console.log(sc.today);
+    console.log('>> MAIN CODE');
+    /**/
 });
