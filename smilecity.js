@@ -86,6 +86,13 @@ sc.anythingLeftToDo = function(){
 			consoleMsg = 'wclink: we just have to go back home after it\'s loaded.';
 			somethingToDo=1;
 			break;
+        case 'myop':
+            consoleMsg = 'myop: no';
+			if(sc.check.myop == 0){ // the div containing this text does not exist
+				somethingToDo=1;
+				consoleMsg = 'myop: yes';
+			}
+            break;
 		default: // we are somewhere else, notify so we can add it to this switch
 			consoleMsg = 'our current location\'s earning message is unknown: '+sc.here;
 			break;
@@ -97,12 +104,12 @@ sc.anythingLeftToDo = function(){
 /**/
 sc.isItTheWeekend = function(){
     var weekend = 0;
-	console.log('<< itsTheWeekend()');
+	console.log('<< isItTheWeekend()');
     if((dayOfWeek == 'Sunday')||(dayOfWeek == 'Saturday')){
         weekend = 1;
         console.log(dayOfWeek);
     }
-	console.log('>> itsTheWeekend()');
+	console.log('>> isItTheWeekend()');
     return weekend;
 }
 /**/
@@ -144,8 +151,7 @@ sc.doTheFirstThing = function(){
 			var url = $('div.wcText:first a').attr('href');
 			sc.goTo(url);
 			break;
-		case 'wclink':// count to 15 and go home (or accounts, then home)
-            // if it's the weekend, go to myopinions instead.
+		case 'wclink':// count to 15 and go home, OR if it's the weekend, go to myopinions instead.
             var destination = sc.goHome();
             if(sc.theWeekend){
                 destination = sc.goTo('http://www.myopinions.co.nz/rewards/instantwin.aspx');
@@ -155,10 +161,11 @@ sc.doTheFirstThing = function(){
 			},10000);
 			break;
         case 'myop':
-            if(0){ // positive message
-                // click it
-            }// then, or if there isn't a link, go home
-            sc.goHome()
+            // click the first link
+            var url = $('div.box ul:first a:first');.attr('href');
+            sc.goTo(url); // if javascript only, this may take a while...
+            sc.goHome();
+            // if it was a true GET, will reload the page and !anythingToDo() so will go home anyway.
             break;
 		case 'guessinggame': // autopick, then submit
 			consoleMsg = 'Autopick, wait for lag, then submit.';
