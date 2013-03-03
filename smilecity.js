@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Smilecity
 // @version      0.4
-// @description	 daily navigate through smilecity.co.nz earning opportunities.
+// @description     daily navigate through smilecity.co.nz earning opportunities.
 // @match        http://www.smilecity.co.nz/*
 // @match        http://www.myopinions.co.nz/rewards/instantwin.aspx
 // @require      http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -218,9 +218,9 @@ $(document).ready(function(){
     
     // START OF EXECUTABLE CODE
     // timer: in 3 hours from now, go home/refresh.
-    setTimeout(function(){
+    setInterval(function(){
         location.reload()
-    },21600000);
+    },10800000);
     
     console.log('<< MAIN CODE'); // ask this sequence at any page load:
     if(sc.somethingToDo){
